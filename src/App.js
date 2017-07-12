@@ -1,36 +1,29 @@
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
 import logo from './logo.svg';
 import './App.css';
+import Lazy from './Lazy'
 
 class App extends Component {
 
-  componentWillMount() {
-    window.addEventListener("scroll", this.handleScroll)
+  state = {
+    showComponent: [1,2,3,4,5,6,7,8,9].map((item, index) => (<div key={index} className='item'></div>)),
+    allow: true
   }
 
-  componentWillUnMount() {
-    window.removeEventListener("scroll")
-  }
-
-  handleScroll = (e) =>{
-    const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-    const node = ReactDom.findDOMNode(this.refs['lazy']);
-    if(node.getBoundingClientRect().top-viewportHeight <= 100)
-    console.log('Trig Event')
+  handleLoadMore = () => {
+    const newData = [1,2,3,4,5,6,7,8,9].map((item, index) => (<div key={index} className='item'></div>))
+    this.setState({showComponent: [...this.state.showComponent, newData]})
+    console.log('trig')
   }
 
   render() {
+    console.log(this.state)
     return (
       <div className="container">
-        <div className='item'></div>
-        <div className='item'></div>
-        <div className='item'></div>
-        <div className='item'></div>
-        <div className='item'></div>
-        <div className='item'></div>
-        <div className='item'></div>
-        <div ref='lazy' className='lazy'></div>
+        {this.state.showComponent}
+        <Lazy
+          onLoadMore={this.handleLoadMore}
+          allowLazy={this.state.allow} />
       </div>
     );
   }

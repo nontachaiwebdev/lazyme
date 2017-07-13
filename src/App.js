@@ -7,12 +7,16 @@ class App extends Component {
 
   state = {
     showComponent: [1,2,3,4,5,6,7,8,9].map((item, index) => (<div key={index} className='item'></div>)),
-    allow: true
+    isLoad: false
   }
 
   handleLoadMore = () => {
     const newData = [1,2,3,4,5,6,7,8,9].map((item, index) => (<div key={index} className='item'></div>))
-    this.setState({showComponent: [...this.state.showComponent, newData]})
+    this.setState({isLoad: true})
+    setTimeout(() => {
+      this.setState({showComponent: [...this.state.showComponent, newData]})
+      this.setState({isLoad: false})
+    }, 5000)
     console.log('trig')
   }
 
@@ -23,7 +27,7 @@ class App extends Component {
         {this.state.showComponent}
         <Lazy
           onLoadMore={this.handleLoadMore}
-          allowLazy={this.state.allow} />
+          isLoad={this.state.isLoad} />
       </div>
     );
   }

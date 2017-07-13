@@ -6,7 +6,7 @@ const Lazy = (props) => (
   <div ref={ref => props.refs.store('lazy', ref)} ></div>
 )
 
-const initLoadState = (props) => (props.allowLazy ? props.allowLazy : true)
+// const initLoadState = (props) => (props.allowLazy ? props.allowLazy : true)
 
 class RefsStore {
   store(name, value) {
@@ -26,11 +26,11 @@ const lifecycleHoc = lifecycle({
 
 const handleEvent = withHandlers({
   handleScroll: props => event => {
-    const { onLoadMore, onLoad, setOnLoad } = props
+    const { onLoadMore, isLoad } = props
     const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
     const node = ReactDom.findDOMNode(props.refs.lazy);
     if(node.getBoundingClientRect().top-viewportHeight <= 100){
-      if(onLoad){
+      if(!isLoad){
         // setOnLoad(false)
         onLoadMore()
       }
@@ -40,7 +40,7 @@ const handleEvent = withHandlers({
 
 export default compose(
   withProps({ refs: new RefsStore() }),
-  withState('onLoad', 'setOnLoad', props => initLoadState(props)),
+  // withState('onLoad', 'setOnLoad', props => initLoadState(props)),
   handleEvent,
   lifecycleHoc
 )(Lazy)
